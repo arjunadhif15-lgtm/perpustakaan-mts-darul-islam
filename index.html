@@ -14,7 +14,7 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 // Isi dua nilai berikut. Publishable key boleh ada di browser; jangan pakai Secret key.
-const SUPABASE_URL = 'https://qzgzyvqlmdhftbggdvhz.supabase.co';
+const SUPABASE_URL = 'https://qqzgyvqlmdhftbggdvhz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_fR-eyHspHwVNTYj6QWCudw_W5BS1kRI';
 const $=id=>document.getElementById(id);const roleNames={admin:'Administrator',librarian:'Petugas perpustakaan',teacher:'Guru',student:'Siswa',headmaster:'Kepala madrasah'};const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let db=null,session=null,profile=null,books=[],categories=[],loans=[];
 const configured=SUPABASE_URL.startsWith('https://')&&SUPABASE_URL.endsWith('.supabase.co')&&SUPABASE_PUBLISHABLE_KEY.length>20&&!SUPABASE_PUBLISHABLE_KEY.startsWith('GANTI_');function msg(id,t,err=false){$(id).textContent=t;$(id).classList.remove('hidden','error');if(err)$(id).classList.add('error')}function clear(id){$(id).classList.add('hidden')}function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===id))}document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));function canManage(){return ['admin','librarian'].includes(profile?.role)}

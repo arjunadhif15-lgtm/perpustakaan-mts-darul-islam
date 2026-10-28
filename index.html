@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#166534">
+<title>E-Perpustakaan MTSS Darul Islam Siak</title>
+<style>
+:root{--green:#166534;--green2:#15803d;--cream:#f8faf5;--gold:#d4a72c;--ink:#17211b;--muted:#647067;--line:#e3e9e2}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--cream);color:var(--ink)}
+header{background:linear-gradient(120deg,#14532d,#15803d);color:white;padding:22px 18px 18px}
+.wrap{max-width:1100px;margin:auto}header .brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:14px;background:#ffffff20;border:1px solid #ffffff60;display:grid;place-items:center;font-size:26px}
+h1{font-size:clamp(20px,4vw,29px);margin:0}header p{margin:5px 0 0;color:#e1f4e5}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 0 0}nav button{border:1px solid #ffffff55;background:#ffffff12;color:white;border-radius:10px;padding:9px 12px;white-space:nowrap;cursor:pointer}nav button.active{background:white;color:var(--green);font-weight:700}
+main{max-width:1100px;margin:22px auto;padding:0 16px 36px}.notice{background:#fff8df;border:1px solid #f0d98a;padding:12px 14px;border-radius:12px;color:#674f0b;font-size:14px;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:0 3px 12px #15351b08}.stat .label{font-size:13px;color:var(--muted)}.stat .value{font-size:28px;font-weight:750;color:var(--green);margin-top:4px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}.panel h2{font-size:18px;margin:0 0 14px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;flex:1;min-width:130px}label{font-size:13px;color:#465349}input,select,textarea{font:inherit;border:1px solid #cfd8cf;border-radius:9px;padding:10px;background:white;min-width:0;width:100%}textarea{min-height:70px;resize:vertical}.btn{border:0;background:var(--green);color:white;border-radius:9px;padding:10px 14px;font:inherit;font-weight:650;cursor:pointer}.btn.secondary{background:#edf5ee;color:var(--green);border:1px solid #cfe3d1}.btn.danger{background:#a52a2a}.btn.small{padding:6px 9px;font-size:13px}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:#526056;font-weight:650;background:#f7faf7}td .muted{font-size:12px;color:var(--muted)}.empty{padding:22px;text-align:center;color:var(--muted)}
+.view{display:none}.view.active{display:block}.book-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.book{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}.book .cover{height:90px;border-radius:9px;background:#edf6ed;display:grid;place-items:center;font-size:36px;margin-bottom:10px}.book h3{font-size:16px;margin:0 0 4px}.book p{font-size:13px;color:var(--muted);margin:4px 0}.tag{display:inline-block;border-radius:20px;background:#e8f5e9;color:#166534;padding:4px 8px;font-size:12px;margin-top:7px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}.book-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.book-list{grid-template-columns:1fr}.stat{padding:12px}.stat .value{font-size:24px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <div class="brand"><div class="logo">📚</div><div><h1>E-Perpustakaan</h1><p>MTSS DARUL ISLAM SIAK · Perpustakaan Digital Madrasah</p></div></div>
+ <nav>
+  <button class="active" data-view="dashboard">Beranda</button><button data-view="catalog">Katalog Buku</button><button data-view="manage">Kelola Buku</button><button data-view="loans">Peminjaman</button>
+ </nav>
+</div></header>
+<main>
+ <div class="notice"><strong>Versi awal / demo.</strong> Data disimpan di browser perangkat ini saja. Belum ada login aman, sinkronisasi antarperangkat, atau database online. Jangan masukkan data pribadi siswa sungguhan sebelum versi online disiapkan.</div>
+ <section id="dashboard" class="view active">
+  <div class="stats">
+   <div class="stat"><div class="label">Total koleksi</div><div class="value" id="totalBooks">0</div></div>
+   <div class="stat"><div class="label">Buku digital</div><div class="value" id="digitalBooks">0</div></div>
+   <div class="stat"><div class="label">Transaksi aktif</div><div class="value" id="activeLoans">0</div></div>
+   <div class="stat"><div class="label">Buku fisik tersedia</div><div class="value" id="availableBooks">0</div></div>
+  </div>
+  <div class="grid">
+   <div class="panel"><h2>Selamat datang</h2><p>Portal perpustakaan MTSS DARUL ISLAM SIAK untuk membantu pencatatan koleksi buku fisik dan digital.</p><p>Mulai dengan menambahkan koleksi di menu <b>Kelola Buku</b>. Buku digital dapat ditautkan menggunakan alamat PDF yang legal dan bisa diakses.</p><button class="btn" onclick="showView('manage')">＋ Tambahkan buku</button></div>
+   <div class="panel"><h2>Aktivitas terbaru</h2><div id="recentActivity" class="empty">Belum ada aktivitas.</div></div>
+  </div>
+ </section>
+ <section id="catalog" class="view">
+  <div class="panel"><div class="row" style="justify-content:space-between"><h2>Katalog Buku</h2><div style="min-width:210px;flex:1;max-width:320px"><input id="searchBooks" placeholder="Cari judul, penulis, kategori…"></div></div><div id="bookCards" class="book-list"></div></div>
+ </section>
+ <section id="manage" class="view">
+  <div class="grid">
+   <div class="panel"><h2 id="formTitle">Tambah buku baru</h2>
+    <form id="bookForm">
+     <input type="hidden" id="bookId">
+     <div class="field"><label for="title">Judul buku *</label><input id="title" required placeholder="Contoh: Fikih untuk MTs"></div>
+     <div class="row"><div class="field"><label for="author">Penulis</label><input id="author" placeholder="Nama penulis"></div><div class="field"><label for="category">Kategori</label><select id="category"><option>Pelajaran</option><option>Al-Qur'an</option><option>Fikih</option><option>Akidah Akhlak</option><option>Hadis</option><option>Sejarah Islam</option><option>Bahasa</option><option>Umum</option><option>Kitab</option></select></div></div>
+     <div class="row"><div class="field"><label for="kind">Jenis koleksi</label><select id="kind"><option value="Fisik">Buku fisik</option><option value="Digital">Buku digital</option><option value="Fisik & Digital">Fisik & digital</option></select></div><div class="field"><label for="copies">Jumlah eksemplar fisik</label><input id="copies" type="number" min="0" value="1"></div></div>
+     <div class="field"><label for="access">Akses buku digital</label><select id="access"><option value="Umum">Umum (tanpa login di versi online)</option><option value="Khusus">Khusus siswa/guru (login di versi online)</option></select></div>
+     <div class="field"><label for="pdf">Tautan PDF (opsional)</label><input id="pdf" type="url" placeholder="https://alamat-buku.pdf"></div>
+     <div class="field"><label for="notes">Catatan</label><textarea id="notes" placeholder="ISBN, lokasi rak, atau catatan lain"></textarea></div>
+     <div class="row"><button class="btn" type="submit">Simpan buku</button><button class="btn secondary" type="button" id="resetForm">Kosongkan</button></div>
+    </form>
+   </div>
+   <div class="panel"><h2>Daftar koleksi</h2><div class="table-wrap"><table><thead><tr><th>Judul / penulis</th><th>Jenis</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="manageRows"></tbody></table></div><p class="muted">Data contoh belum disediakan. Tambahkan buku milik madrasah atau materi yang boleh dibagikan.</p></div>
+  </div>
+ </section>
+ <section id="loans" class="view">
+  <div class="grid">
+   <div class="panel"><h2>Catat peminjaman buku fisik</h2>
+    <form id="loanForm">
+     <div class="field"><label for="borrower">Nama peminjam *</label><input id="borrower" required placeholder="Nama siswa/guru"></div>
+     <div class="field"><label for="borrowerType">Jenis anggota</label><select id="borrowerType"><option>Siswa</option><option>Guru</option></select></div>
+     <div class="field"><label for="loanBook">Buku *</label><select id="loanBook" required><option value="">Pilih buku</option></select></div>
+     <div class="row"><div class="field"><label for="loanDate">Tanggal pinjam</label><input id="loanDate" type="date" required></div><div class="field"><label for="dueDate">Batas kembali</label><input id="dueDate" type="date" required></div></div>
+     <button class="btn" type="submit">Catat peminjaman</button>
+    </form>
+   </div>
+   <div class="panel"><h2>Transaksi peminjaman</h2><div class="table-wrap"><table><thead><tr><th>Peminjam / buku</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="loanRows"></tbody></table></div></div>
+  </div>
+ </section>
+</main>
+<footer>MTSS DARUL ISLAM SIAK · Prototipe awal perpustakaan digital</footer>
+<script>
+const $=id=>document.getElementById(id);
+let books=JSON.parse(localStorage.getItem('darul_books')||'[]');
+let loans=JSON.parse(localStorage.getItem('darul_loans')||'[]');
+const save=()=>{localStorage.setItem('darul_books',JSON.stringify(books));localStorage.setItem('darul_loans',JSON.stringify(loans));render()};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function resetBookForm(){$('bookForm').reset();$('bookId').value='';$('copies').value=1;$('formTitle').textContent='Tambah buku baru'}
+$('resetForm').addEventListener('click',resetBookForm);
+$('bookForm').addEventListener('submit',e=>{e.preventDefault();const id=$('bookId').value||String(Date.now());const old=books.find(b=>b.id===id);const item={id,title:$('title').value.trim(),author:$('author').value.trim(),category:$('category').value,kind:$('kind').value,copies:Math.max(0,Number($('copies').value)||0),access:$('access').value,pdf:$('pdf').value.trim(),notes:$('notes').value.trim()};if(old)books=books.map(b=>b.id===id?item:b);else books.unshift(item);save();resetBookForm();showView('manage')});
+function editBook(id){const b=books.find(x=>x.id===id);if(!b)return;$('bookId').value=b.id;$('title').value=b.title;$('author').value=b.author;$('category').value=b.category;$('kind').value=b.kind;$('copies').value=b.copies;$('access').value=b.access;$('pdf').value=b.pdf;$('notes').value=b.notes;$('formTitle').textContent='Edit buku';showView('manage');window.scrollTo({top:0,behavior:'smooth'})}
+function deleteBook(id){if(!confirm('Hapus buku ini?'))return;books=books.filter(b=>b.id!==id);save()}
+$('searchBooks').addEventListener('input',renderCatalog);
+$('loanDate').value=new Date().toISOString().slice(0,10);const due=new Date();due.setDate(due.getDate()+7);$('dueDate').value=due.toISOString().slice(0,10);
+$('loanForm').addEventListener('submit',e=>{e.preventDefault();const b=books.find(x=>x.id===$('loanBook').value);if(!b){alert('Pilih buku terlebih dahulu.');return}if(!b.copies){alert('Jumlah buku fisik belum diisi.');return}const active=loans.filter(l=>l.bookId===b.id&&!l.returned).length;if(active>=b.copies){alert('Semua eksemplar buku ini sedang dipinjam.');return}loans.unshift({id:String(Date.now()),borrower:$('borrower').value.trim(),type:$('borrowerType').value,bookId:b.id,bookTitle:b.title,date:$('loanDate').value,due:$('dueDate').value,returned:false});save();$('borrower').value='';});
+function returnLoan(id){const l=loans.find(x=>x.id===id);if(l){l.returned=true;l.returnDate=new Date().toISOString().slice(0,10);save()}}
+function renderCatalog(){const q=($('searchBooks')?.value||'').toLowerCase();const list=books.filter(b=>[b.title,b.author,b.category].join(' ').toLowerCase().includes(q));$('bookCards').innerHTML=list.length?list.map(b=>`<article class="book"><div class="cover">📘</div><h3>${esc(b.title)}</h3><p>${esc(b.author||'Penulis tidak dicantumkan')}</p><p>${esc(b.category)} · ${esc(b.kind)}</p><span class="tag">${esc(b.access==='Umum'?'Akses umum':'Khusus siswa/guru')}</span>${b.pdf?`<p><a href="${esc(b.pdf)}" target="_blank" rel="noopener">Buka PDF ↗</a></p>`:''}</article>`).join(''):'<div class="empty">Belum ada buku. Tambahkan koleksi melalui menu Kelola Buku.</div>'}
+function render(){const active=loans.filter(l=>!l.returned).length;const borrowedByBook={};loans.filter(l=>!l.returned).forEach(l=>borrowedByBook[l.bookId]=(borrowedByBook[l.bookId]||0)+1);$('totalBooks').textContent=books.reduce((n,b)=>n+b.copies,0);$('digitalBooks').textContent=books.filter(b=>b.kind!=='Fisik').length;$('activeLoans').textContent=active;$('availableBooks').textContent=books.reduce((n,b)=>n+Math.max(0,b.copies-(borrowedByBook[b.id]||0)),0);
+$('manageRows').innerHTML=books.length?books.map(b=>`<tr><td><b>${esc(b.title)}</b><br><span class="muted">${esc(b.author||'')}</span></td><td>${esc(b.kind)}</td><td>${b.copies}</td><td><button class="btn secondary small" onclick="editBook('${b.id}')">Edit</button> <button class="btn danger small" onclick="deleteBook('${b.id}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">Belum ada koleksi.</td></tr>';
+$('loanBook').innerHTML='<option value="">Pilih buku</option>'+books.filter(b=>b.copies>0&&b.kind!=='Digital').map(b=>`<option value="${b.id}">${esc(b.title)} (${b.copies} eks.)</option>`).join('');
+$('loanRows').innerHTML=loans.length?loans.map(l=>`<tr><td><b>${esc(l.borrower)}</b><br><span class="muted">${esc(l.type)} · ${esc(l.bookTitle)}</span></td><td>${esc(l.date)}<br><span class="muted">Kembali: ${esc(l.due)}</span></td><td>${l.returned?'Dikembalikan':(l.due<new Date().toISOString().slice(0,10)?'Terlambat':'Dipinjam')}</td><td>${l.returned?'—':`<button class="btn small" onclick="returnLoan('${l.id}')">Kembalikan</button>`}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Belum ada transaksi.</td></tr>';
+$('recentActivity').innerHTML=loans.length?loans.slice(0,4).map(l=>`<p>📘 ${esc(l.borrower)} — ${esc(l.bookTitle)} <span class="muted">(${l.returned?'kembali':'dipinjam'})</span></p>`).join(''):'Belum ada aktivitas.';renderCatalog()}
+render();
+</script>
+</body></html>

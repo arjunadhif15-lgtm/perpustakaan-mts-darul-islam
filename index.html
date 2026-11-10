@@ -308,7 +308,57 @@ $('dictionaryResults').addEventListener('click',e=>{
  const btn=e.target.closest('button[data-speak]');
  if(btn)speakDictionary(btn.dataset.speak,btn.dataset.lang||'id-ID');
 });
-async function loadDictionary(offlineOnly=false){if(!db){msg('dictionaryStatus','Koneksi Supabase belum siap.',true);return;}$('dictionaryRefresh').disabled=true;$('dictionaryOffline').disabled=true;msg('dictionaryStatus','Memuat kamus…');try{if(!offlineOnly&&navigator.onLine){const {data,error}=await db.from('dictionary_entries').select('id,category,indonesian,arabic,english,arabic_latin,example_indonesian,example_arabic,example_english,audio_url,verified').order('indonesian');if(error)throw error;dictionaryEntries=data||[];dictionaryMode='online';try{await saveDictionaryLocal(dictionaryEntries);}catch(cacheError){console.warn('Cache kamus tidak tersimpan:',cacheError);} }else{dictionaryEntries=await readDictionaryLocal();dictionaryMode='offline';}const cats=[...new Set(dictionaryEntries.map(r=>r.category).filter(Boolean))].sort();const old=$('dictionaryCategory').value;$('dictionaryCategory').innerHTML='<option value="">Semua kategori</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cats.includes(old))$('dictionaryCategory').value=old;dictionaryLoaded=true;renderDictionary();msg('dictionaryStatus',dictionaryEntries.length?`Kamus siap. ${dictionaryEntries.length} kosakata dimuat${dictionaryMode==='offline'?' dari penyimpanan perangkat.':' dari Supabase.'}`:'Belum ada data kamus.');}catch(e){console.error('Kamus:',e);try{dictionaryEntries=await readDictionaryLocal();dictionaryMode='offline';dictionaryLoaded=true;renderDictionary();msg('dictionaryStatus',`Tidak dapat mengambil data online (${e.message}). Menampilkan ${dictionaryEntries.length} kosakata tersimpan di perangkat.`,true);}catch(localError){msg('dictionaryStatus','Gagal memuat kamus: '+(e.message||String(e)),true);}}finally{$('dictionaryRefresh').disabled=false;$('dictionaryOffline').disabled=false;}}
+async function loadDictionary(offlineOnly=false){
+ if(!db){msg('dictionaryStatus','Koneksi Supabase belum siap.',true);return;}
+ $('dictionaryRefresh').disabled=true;
+ $('dictionaryOffline').disabled=true;
+ msg('dictionaryStatus','Memuat kamus…');
+ try{
+  if(!offlineOnly&&navigator.onLine){
+   const pageSize=1000;
+   const maxRows=10000;
+   const allRows=[];
+   for(let offset=0;offset<maxRows;offset+=pageSize){
+    msg('dictionaryStatus',`Memuat kosakata ${offset+1}–${Math.min(offset+pageSize,maxRows)}…`);
+    const {data,error}=await db.from('dictionary_entries')
+     .select('id,category,indonesian,arabic,english,arabic_latin,example_indonesian,example_arabic,example_english,audio_url,verified')
+     .order('indonesian').order('id')
+     .range(offset,Math.min(offset+pageSize,maxRows)-1);
+    if(error)throw error;
+    const page=data||[];
+    allRows.push(...page);
+    if(page.length<pageSize)break;
+   }
+   dictionaryEntries=allRows;
+   dictionaryMode='online';
+   try{await saveDictionaryLocal(dictionaryEntries);}
+   catch(cacheError){console.warn('Cache kamus tidak tersimpan:',cacheError);}
+  }else{
+   dictionaryEntries=await readDictionaryLocal();
+   dictionaryMode='offline';
+  }
+  const cats=[...new Set(dictionaryEntries.map(r=>r.category).filter(Boolean))].sort();
+  const old=$('dictionaryCategory').value;
+  $('dictionaryCategory').innerHTML='<option value="">Semua kategori</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if(cats.includes(old))$('dictionaryCategory').value=old;
+  dictionaryLoaded=true;
+  renderDictionary();
+  const suffix=dictionaryMode==='offline'?' dari penyimpanan perangkat.':' dari Supabase.';
+  msg('dictionaryStatus',dictionaryEntries.length?`Kamus siap. ${dictionaryEntries.length}${dictionaryEntries.length>=10000?' (batas pemuatan 10.000)':''} kosakata dimuat${suffix}`:'Belum ada data kamus.');
+ }catch(e){
+  console.error('Kamus:',e);
+  try{
+   dictionaryEntries=await readDictionaryLocal();
+   dictionaryMode='offline';
+   dictionaryLoaded=true;
+   renderDictionary();
+   msg('dictionaryStatus',`Tidak dapat mengambil data online (${e.message}). Menampilkan ${dictionaryEntries.length} kosakata tersimpan di perangkat.`,true);
+  }catch(localError){msg('dictionaryStatus','Gagal memuat kamus: '+(e.message||String(e)),true);}
+ }finally{
+  $('dictionaryRefresh').disabled=false;
+  $('dictionaryOffline').disabled=false;
+ }
+}
 $('dictionarySearch').addEventListener('input',renderDictionary);
 $('dictionaryCategory').addEventListener('change',renderDictionary);
 $('dictionaryRefresh').addEventListener('click',()=>loadDictionary(false));

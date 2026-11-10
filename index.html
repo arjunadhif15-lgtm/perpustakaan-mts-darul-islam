@@ -74,6 +74,11 @@ footer{padding:28px 15px;color:#7a897e}
 .dictionary-example p{margin:4px 0}
 .dictionary-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .dictionary-count{font-size:13px;color:var(--muted)}
+.dictionary-audio-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.dictionary-audio{border:1px solid #cfe3d1;background:#edf6ef;color:#075b3b;border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;font-weight:650;cursor:pointer}
+.dictionary-audio:hover{background:#dff0e3}
+.dictionary-audio:focus{outline:3px solid #0c75401b;outline-offset:2px}
+
 @media(max-width:650px){.dictionary-tools{grid-template-columns:1fr}.dictionary-words{grid-template-columns:1fr}.dictionary-arabic{text-align:left}}
 
 </style></head><body>
@@ -269,7 +274,40 @@ const DICT_DB_NAME='eperpustakaan_dictionary_v1';
 function openDictionaryDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DICT_DB_NAME,1);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains('entries'))d.createObjectStore('entries',{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
 async function saveDictionaryLocal(rows){const d=await openDictionaryDB();await new Promise((resolve,reject)=>{const tx=d.transaction('entries','readwrite');const store=tx.objectStore('entries');store.clear();rows.forEach(r=>store.put(r));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});d.close();}
 async function readDictionaryLocal(){const d=await openDictionaryDB();const rows=await new Promise((resolve,reject)=>{const req=d.transaction('entries','readonly').objectStore('entries').getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);});d.close();return rows;}
-function renderDictionary(){const q=($('dictionarySearch').value||'').trim().toLocaleLowerCase();const cat=$('dictionaryCategory').value;if(!q){$('dictionaryCount').textContent=`${dictionaryEntries.length} kosakata tersedia${dictionaryMode==='offline'?' · mode offline':''}. Ketik kata yang ingin dicari.`;$('dictionaryResults').innerHTML='';return;}const rows=dictionaryEntries.filter(r=>(!cat||r.category===cat)&&[r.indonesian,r.arabic,r.english,r.arabic_latin].some(v=>String(v||'').toLocaleLowerCase().includes(q)));$('dictionaryCount').textContent=`Menampilkan ${rows.length} hasil dari ${dictionaryEntries.length} kosakata${dictionaryMode==='offline'?' · mode offline':''}.`;$('dictionaryResults').innerHTML=rows.length?rows.map(r=>`<article class="dictionary-card"><div class="muted">${esc(r.category||'Tanpa kategori')}</div><div class="dictionary-words"><div><small>Bahasa Indonesia</small><strong>${esc(r.indonesian)}</strong></div><div><small>العَرَبِيَّةُ</small><strong class="dictionary-arabic" lang="ar" dir="rtl">${esc(r.arabic)}</strong><small>${esc(r.arabic_latin||'')}</small></div><div><small>English</small><strong>${esc(r.english)}</strong></div></div>${(r.example_indonesian||r.example_arabic||r.example_english)?`<div class="dictionary-example"><b>Contoh kalimat</b><p>${esc(r.example_indonesian||'')}</p><p lang="ar" dir="rtl" style="font-size:18px">${esc(r.example_arabic||'')}</p><p>${esc(r.example_english||'')}</p></div>`:''}</article>`).join(''):'<div class="dictionary-card">Belum ada kosakata yang cocok. Coba kata lain atau sinkronkan dari internet.</div>';}
+function speakDictionary(text,lang){
+ if(!text||!('speechSynthesis' in window)){msg('dictionaryStatus','Fitur suara tidak tersedia di browser ini.',true);return;}
+ try{
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(String(text));
+  utterance.lang=lang;
+  utterance.rate=0.86;
+  utterance.pitch=1;
+  utterance.onstart=()=>msg('dictionaryStatus','Sedang membacakan: '+text);
+  utterance.onend=()=>msg('dictionaryStatus','Pembacaan selesai.');
+  utterance.onerror=()=>msg('dictionaryStatus','Suara bahasa ini belum tersedia di perangkat/browser. Coba pasang voice bahasa terkait di pengaturan sistem.',true);
+  window.speechSynthesis.speak(utterance);
+ }catch(e){msg('dictionaryStatus','Tidak dapat memutar suara: '+(e.message||String(e)),true);}
+}
+function renderDictionary(){
+ const q=($('dictionarySearch').value||'').trim().toLocaleLowerCase();
+ const cat=$('dictionaryCategory').value;
+ if(!q){$('dictionaryCount').textContent=`${dictionaryEntries.length} kosakata tersedia${dictionaryMode==='offline'?' · mode offline':''}. Ketik kata yang ingin dicari.`;$('dictionaryResults').innerHTML='';return;}
+ const rows=dictionaryEntries.filter(r=>(!cat||r.category===cat)&&[r.indonesian,r.arabic,r.english,r.arabic_latin].some(v=>String(v||'').toLocaleLowerCase().includes(q)));
+ $('dictionaryCount').textContent=`Menampilkan ${rows.length} hasil dari ${dictionaryEntries.length} kosakata${dictionaryMode==='offline'?' · mode offline':''}.`;
+ $('dictionaryResults').innerHTML=rows.length?rows.map(r=>`<article class="dictionary-card">
+  <div class="muted">${esc(r.category||'Tanpa kategori')}</div>
+  <div class="dictionary-words">
+   <div><small>Bahasa Indonesia</small><strong>${esc(r.indonesian)}</strong><div class="dictionary-audio-row"><button type="button" class="dictionary-audio" data-speak="${esc(r.indonesian)}" data-lang="id-ID">🔊 Dengarkan</button></div></div>
+   <div><small>العَرَبِيَّةُ</small><strong class="dictionary-arabic" lang="ar" dir="rtl">${esc(r.arabic)}</strong><small>${esc(r.arabic_latin||'')}</small><div class="dictionary-audio-row"><button type="button" class="dictionary-audio" data-speak="${esc(r.arabic)}" data-lang="ar-SA">🔊 Dengarkan</button></div></div>
+   <div><small>English</small><strong>${esc(r.english)}</strong><div class="dictionary-audio-row"><button type="button" class="dictionary-audio" data-speak="${esc(r.english)}" data-lang="en-US">🔊 Listen</button></div></div>
+  </div>
+  ${(r.example_indonesian||r.example_arabic||r.example_english)?`<div class="dictionary-example"><b>Contoh kalimat</b><p>${esc(r.example_indonesian||'')}</p><p lang="ar" dir="rtl" style="font-size:18px">${esc(r.example_arabic||'')}</p><p>${esc(r.example_english||'')}</p></div>`:''}
+ </article>`).join(''):'<div class="dictionary-card">Belum ada kosakata yang cocok. Coba kata lain atau sinkronkan dari internet.</div>';
+}
+$('dictionaryResults').addEventListener('click',e=>{
+ const btn=e.target.closest('button[data-speak]');
+ if(btn)speakDictionary(btn.dataset.speak,btn.dataset.lang||'id-ID');
+});
 async function loadDictionary(offlineOnly=false){if(!db){msg('dictionaryStatus','Koneksi Supabase belum siap.',true);return;}$('dictionaryRefresh').disabled=true;$('dictionaryOffline').disabled=true;msg('dictionaryStatus','Memuat kamus…');try{if(!offlineOnly&&navigator.onLine){const {data,error}=await db.from('dictionary_entries').select('id,category,indonesian,arabic,english,arabic_latin,example_indonesian,example_arabic,example_english,audio_url,verified').order('indonesian');if(error)throw error;dictionaryEntries=data||[];dictionaryMode='online';try{await saveDictionaryLocal(dictionaryEntries);}catch(cacheError){console.warn('Cache kamus tidak tersimpan:',cacheError);} }else{dictionaryEntries=await readDictionaryLocal();dictionaryMode='offline';}const cats=[...new Set(dictionaryEntries.map(r=>r.category).filter(Boolean))].sort();const old=$('dictionaryCategory').value;$('dictionaryCategory').innerHTML='<option value="">Semua kategori</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cats.includes(old))$('dictionaryCategory').value=old;dictionaryLoaded=true;renderDictionary();msg('dictionaryStatus',dictionaryEntries.length?`Kamus siap. ${dictionaryEntries.length} kosakata dimuat${dictionaryMode==='offline'?' dari penyimpanan perangkat.':' dari Supabase.'}`:'Belum ada data kamus.');}catch(e){console.error('Kamus:',e);try{dictionaryEntries=await readDictionaryLocal();dictionaryMode='offline';dictionaryLoaded=true;renderDictionary();msg('dictionaryStatus',`Tidak dapat mengambil data online (${e.message}). Menampilkan ${dictionaryEntries.length} kosakata tersimpan di perangkat.`,true);}catch(localError){msg('dictionaryStatus','Gagal memuat kamus: '+(e.message||String(e)),true);}}finally{$('dictionaryRefresh').disabled=false;$('dictionaryOffline').disabled=false;}}
 $('dictionarySearch').addEventListener('input',renderDictionary);
 $('dictionaryCategory').addEventListener('change',renderDictionary);

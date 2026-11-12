@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "E-Perpustakaan MTSS Darul Islam Siak",
+  "short_name": "E-Perpustakaan",
+  "description": "Perpustakaan digital MTSS Darul Islam Siak",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f1e8",
+  "theme_color": "#14532d",
+  "icons": [
+    {
+      "src": "./banner-ilustrasi-perpustakaan.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}

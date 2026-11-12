@@ -204,8 +204,36 @@ header h1{font-size:clamp(20px,3vw,27px)}
 @media(max-width:650px){.premium-hero{grid-template-columns:1fr;min-height:340px;background-position:center,right center;background-size:auto,cover}.premium-hero:before{background:linear-gradient(90deg,#063d2d 0%,#063d2dcc 55%,transparent 100%);opacity:1}.hero-art{min-height:70px}.catalog-topline{display:block}.catalog-search-wrap{min-width:0;margin-top:14px}.class-folders{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.class-folder{min-height:154px;padding:13px}.class-folder .folder-icon{height:70px}.folder-illustration{width:94px;height:70px}.class-folder strong{font-size:14px}.booklist{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.class-folders,.booklist{grid-template-columns:1fr 1fr}.class-folder{min-height:142px}.stats{grid-template-columns:1fr 1fr}.premium-hero{min-height:320px;padding:22px}.premium-hero h2{font-size:29px}.book{padding:11px}}
 
+
+/* ===== UJI COBA LOGO KATALOG MINIMALIS PREMIUM ===== */
+.brand-book{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;padding:9px;border-radius:17px;color:#075b3b;background:linear-gradient(145deg,#fffdf5,#f4ecd4);border:1px solid #d7bd78;box-shadow:0 5px 15px rgba(16,61,39,.10)}
+.brand-book svg{display:block;width:100%;height:100%}
+.catalog-title{display:flex;align-items:center;gap:11px}
+.catalog-title-mark{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;background:#075b3b;color:#e9d18a;border:1px solid #d7bd78;box-shadow:0 4px 12px rgba(7,91,59,.15)}.catalog-title-mark svg{width:27px;height:27px}
+.catalog-kicker{background:#eff6ee;border:1px solid #dce9d9}
+#catalogView{border:1px solid #e4eadf}
+.class-folder{border:1px solid #e6e5d9;background:linear-gradient(145deg,#fff 0%,#fbfaf4 100%);box-shadow:0 5px 16px rgba(20,62,39,.055)}
+.class-folder .folder-icon{width:58px;height:58px;flex:0 0 58px;margin:0 auto 12px;display:grid;place-items:center;border-radius:17px;color:#0b6341;background:linear-gradient(145deg,#eef6ef,#e4efe5);border:1px solid #d8e7d9}
+.class-folder .folder-icon svg{width:29px;height:29px}.class-folder .folder-illustration{width:46px;height:46px;max-width:46px;object-fit:contain;object-position:center}
+.class-folder .folder-sparkle{display:none}
+.class-folder strong{font-family:Georgia,serif;font-size:16px;color:#173d2a}
+.class-folder small{background:#f2f5ed;border:1px solid #e3eadc;color:#58705d}
+.premium-hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:16px;min-height:300px;background:linear-gradient(105deg,#063d2d 0%,#07583b 48%,#0b7049 100%)}
+.premium-hero .hero-copy{position:relative;z-index:3}
+.premium-hero .hero-art{display:flex;position:relative;z-index:2;align-items:center;justify-content:center;min-width:0;width:100%;height:245px;min-height:245px;overflow:hidden;border-radius:18px;background:rgba(255,255,255,.045)}
+.premium-hero .hero-art img{display:block;width:100%;height:100%;max-height:245px;object-fit:contain;object-position:center;filter:drop-shadow(0 9px 16px rgba(0,20,12,.22))}
+@media(max-width:760px){.premium-hero{grid-template-columns:1fr;gap:8px;min-height:0}.premium-hero .hero-art{height:165px;min-height:165px}.premium-hero .hero-art img{max-height:165px}}
+@media(max-width:430px){.brand-book{width:48px;height:48px;flex-basis:48px}.catalog-title-mark{width:34px;height:34px;flex-basis:34px}}
+
 </style></head><body>
-<header><div class="wrap brand"><div class="logo brand-book" aria-hidden="true">📚</div><div><h1>E-Perpustakaan</h1><p>MTSS DARUL ISLAM SIAK · Perpustakaan Digital Madrasah</p></div></div></header>
+<header><div class="wrap brand"><div class="logo brand-book" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img" aria-label="Logo buku terbuka">
+        <path d="M8 15c9-4 17-2 24 4v34C24 47 16 45 8 49V15Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M56 15c-9-4-17-2-24 4v34c8-6 16-8 24-4V15Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M14 23c6-2 11-1 15 2M14 31c6-2 11-1 15 2M50 23c-6-2-11-1-15 2M50 31c-6-2-11-1-15 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 19v34" stroke="#d7b45c" stroke-width="2.5"/>
+      </svg>
+    </div><div><h1>E-Perpustakaan</h1><p>MTSS DARUL ISLAM SIAK · Perpustakaan Digital Madrasah</p></div></div></header>
 <main><section class="premium-hero" aria-label="Selamat datang di perpustakaan digital">
 <div class="hero-copy">
 <span class="hero-kicker">✦ LITERASI · ILMU · AKHLAK MULIA</span>
@@ -213,7 +241,7 @@ header h1{font-size:clamp(20px,3vw,27px)}
 <p>Selamat datang di E-Perpustakaan MTSS Darul Islam Siak. Temukan bacaan pilihan, perluas wawasan, dan tumbuhkan semangat membaca setiap hari.</p>
 <div class="hero-actions"><a class="hero-primary" href="#loginPanel">Masuk&nbsp; →</a><a class="hero-secondary" href="#loginPanel">Mulai Membaca</a></div>
 </div>
-<div class="hero-art" aria-hidden="true"></div></div></div>
+<div class="hero-art" aria-hidden="true"><img src="banner-siswa-ruang-pustaka.webp" alt="Ilustrasi siswa dan siswi membaca di perpustakaan"></div>
 </section><div id="configWarning" class="status error hidden">Konfigurasi Supabase belum diisi. Edit file index.html dan ganti SUPABASE_URL serta SUPABASE_PUBLISHABLE_KEY.</div>
 <section id="loginPanel" class="panel login"><h2 style="text-align:center">Login perpustakaan</h2><p class="muted">Siswa: masukkan ID 3 digit (contoh <b>001</b>) dan kata sandi awal dari administrator. Guru dan petugas dapat menggunakan email akun masing-masing.</p><form id="loginForm"><div class="field"><label for="email">ID siswa atau email</label><input id="email" type="text" autocomplete="username" placeholder="Contoh: 001 atau email akun" required></div><div class="field"><label for="password">Kata sandi</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn" id="loginBtn" type="submit" style="width:100%">Masuk</button></form><div id="loginMessage" class="status hidden"></div><p class="muted" style="margin-top:14px">Kesulitan masuk? Hubungi administrator perpustakaan. Jangan membagikan kata sandi kepada orang lain.</p><div style="text-align:center;margin-top:14px"><button type="button" class="btn secondary" id="showSignupBtn">Daftar Akun Baru</button></div>
 <section id="signupPanel" class="panel hidden" style="margin-top:14px">
@@ -231,7 +259,9 @@ header h1{font-size:clamp(20px,3vw,27px)}
 </section>
 </section>
 <section id="appPanel" class="hidden"><div class="topbar"><div><b id="welcome">Selamat datang</b><br><span id="roleBadge" class="pill">Pengguna</span></div><button id="logoutBtn" class="btn secondary">Keluar</button></div><div id="appMessage" class="status hidden"></div><div class="stats"><div class="stat"><small>Judul buku</small><strong id="statBooks">0</strong></div><div class="stat"><small>Koleksi digital</small><strong id="statDigital">0</strong></div><div class="stat"><small>Peminjaman aktif yang terlihat</small><strong id="statLoans">0</strong></div></div><div class="tabs"><button class="active" data-view="catalogView">Katalog</button><button id="manageTab" data-view="manageView">Kelola buku</button><button id="loansTab" data-view="loansView">Peminjaman</button><button id="usersTab" data-view="usersView">Profil pengguna</button><button id="dictionaryTab" data-view="dictionaryView">Kamus 3 Bahasa</button></div>
-<section id="catalogView" class="view active panel"><div class="catalog-topline"><div><span class="catalog-kicker">✦ KOLEKSI PILIHAN MADRASAH</span><h2 style="margin:5px 0 0">Jelajahi Katalog Buku</h2><p class="muted">Pilih kategori dan temukan bacaan favoritmu.</p></div><label class="catalog-search-wrap"><span aria-hidden="true">⌕</span><input id="search" placeholder="Cari judul, penulis, atau kategori…"></label></div><div id="catalogFolders" class="class-folders"></div><div id="catalogBack" class="catalog-back hidden"><button type="button" class="btn secondary" id="backToFolders">← Kembali ke 12 kategori</button></div><h3 id="catalogHeading" class="catalog-heading hidden"></h3><div id="catalog" class="booklist"></div></section>
+<section id="catalogView" class="view active panel"><div class="catalog-topline"><div><span class="catalog-kicker">✦ KOLEKSI PILIHAN MADRASAH</span><h2 class="catalog-title" style="margin:5px 0 0"><span class="catalog-title-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M4 7c5-2 9-1 12 2v17c-3-3-7-4-12-2V7Zm24 0c-5-2-9-1-12 2v17c3-3 7-4 12-2V7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 9v17" stroke="#d7b45c" stroke-width="1.8"/></svg>
+    </span> Jelajahi Katalog Buku</h2><p class="muted">Pilih kategori dan temukan bacaan favoritmu.</p></div><label class="catalog-search-wrap"><span aria-hidden="true">⌕</span><input id="search" placeholder="Cari judul, penulis, atau kategori…"></label></div><div id="catalogFolders" class="class-folders"></div><div id="catalogBack" class="catalog-back hidden"><button type="button" class="btn secondary" id="backToFolders">← Kembali ke 12 kategori</button></div><h3 id="catalogHeading" class="catalog-heading hidden"></h3><div id="catalog" class="booklist"></div></section>
 
 <section id="dictionaryView" class="view panel">
  <div class="dictionary-heading"><span class="hero-kicker" style="background:#edf6ef;color:#17613e;border-color:#d8e9dc">✦ INDONESIA · العربية · ENGLISH</span><h2>📖 Kamus 3 Bahasa</h2></div>

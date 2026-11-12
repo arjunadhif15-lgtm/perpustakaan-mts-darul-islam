@@ -225,6 +225,18 @@ header h1{font-size:clamp(20px,3vw,27px)}
 @media(max-width:760px){.premium-hero{grid-template-columns:1fr;gap:8px;min-height:0}.premium-hero .hero-art{height:165px;min-height:165px}.premium-hero .hero-art img{max-height:165px}}
 @media(max-width:430px){.brand-book{width:48px;height:48px;flex-basis:48px}.catalog-title-mark{width:34px;height:34px;flex-basis:34px}}
 
+
+/* Kategori: ikon garis minimalis premium, tanpa thumbnail gambar */
+.class-folder .folder-icon{width:58px!important;height:58px!important;min-height:58px!important;flex:0 0 58px!important;margin:0 auto 13px!important;display:grid!important;place-items:center!important;border-radius:17px!important;color:#0b6040!important;background:linear-gradient(145deg,#f7fbf6,#e8f1e8)!important;border:1px solid #d8e5d7!important;box-shadow:inset 0 1px 0 #fff,0 4px 10px rgba(16,61,39,.06)!important}
+.class-folder .folder-icon svg{display:block!important;width:32px!important;height:32px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.55!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.class-folder:nth-child(4n+2) .folder-icon{color:#9a762b!important;background:linear-gradient(145deg,#fffaf0,#f5ecd8)!important;border-color:#eadbb7!important}
+.class-folder:nth-child(4n+3) .folder-icon{color:#58658c!important;background:linear-gradient(145deg,#f7f7ff,#eceefa)!important;border-color:#dfe2f0!important}
+.class-folder:nth-child(4n) .folder-icon{color:#356b80!important;background:linear-gradient(145deg,#f3fafc,#e6f1f4)!important;border-color:#d8e8ec!important}
+.class-folder{min-height:150px!important;padding:18px 14px!important}
+.class-folder strong{font-size:15px!important;letter-spacing:.1px}
+.class-folder small{font-size:10px!important}
+.folder-illustration,.folder-sparkle{display:none!important}
+
 </style></head><body>
 <header><div class="wrap brand"><div class="logo brand-book" aria-hidden="true">
       <svg viewBox="0 0 64 64" role="img" aria-label="Logo buku terbuka">
@@ -316,22 +328,23 @@ function renderCatalog(){
     $('catalog').innerHTML='';
     folders.innerHTML=categories.map(c=>{
       const count=books.filter(b=>Number(b.category_id)===Number(c.id)).length;
-      const categoryArt={
-        "Al-Qur'an":"katalog-alquran.webp",
-        "Akidah Akhlak":"katalog-akidah-akhlak.webp",
-        "Bahasa Arab":"katalog-bahasa-arab.webp",
-        "Buku Pelajaran":"katalog-buku-pelajaran.webp",
-        "Bacaan Islami":"katalog-bacaan-islami.webp",
-        "Bacaan Umum":"katalog-bacaan-umum.webp",
-        "Cerita Anak":"katalog-cerita-anak.webp",
-        "Cerita Rakyat":"katalog-cerita-rakyat.webp",
-        "Fikih":"katalog-fikih.webp",
-        "Hadis":"katalog-hadis.webp",
-        "Kitab":"katalog-kitab.webp",
-        "Literasi & Remaja":"katalog-literasi-remaja.webp",
-        "Literasi Umum":"katalog-literasi-remaja.webp"
+      const categorySymbols={
+        "Al-Qur'an":'<path d="M5 7.5c4.2-1.7 8-.8 11 2.1v14c-3.1-2.7-6.8-3.5-11-1.8z"/><path d="M27 7.5c-4.2-1.7-8-.8-11 2.1v14c3.1-2.7 6.8-3.5 11-1.8z"/><path d="M16 9.6v14"/>',
+        "Akidah Akhlak":'<path d="M16 4 27 9v7c0 7-5 11-11 14C10 27 5 23 5 16V9z"/><path d="m11 16 3.2 3.2L21.5 12"/>',
+        "Bahasa Arab":'<path d="M6 8h20M9 8c0 9-2 13-5 16M9 14c3 4 6 7 10 9M19 7l-5 18M17 20h10"/>',
+        "Buku Pelajaran":'<path d="M6 6.5h17a3 3 0 0 1 3 3V26H9a3 3 0 0 1-3-3z"/><path d="M6 9.5a3 3 0 0 1 3-3M10 12h11M10 17h11M10 22h7"/>',
+        "Bacaan Islami":'<path d="M16 4 18.5 11.5 26 14l-7.5 2.5L16 24l-2.5-7.5L6 14l7.5-2.5z"/><path d="M24 22v5M21.5 24.5h5"/>',
+        "Bacaan Umum":'<path d="M7 6h17v21H7z"/><path d="M11 11h9M11 15h9M11 19h6"/><path d="M5 9v20h17"/>',
+        "Cerita Anak":'<path d="M5 7c4-2 8-1 11 2v17c-3-3-7-4-11-2z"/><path d="M27 7c-4-2-8-1-11 2v17c3-3 7-4 11-2z"/><path d="M10 13h3M19 13h4"/>',
+        "Cerita Rakyat":'<path d="m4 15 12-10 12 10"/><path d="M7 14v13h18V14M13 27v-8h6v8"/><path d="M22 8V5h3v6"/>',
+        "Fikih":'<path d="M16 5v19M7 9h18M10 9l-4 9h8zM22 9l-4 9h8z"/><path d="M11 27h10M13 24h6"/>',
+        "Hadis":'<path d="M7 5h18v23H7z"/><path d="M11 11h10M11 16h10M11 21h7"/><path d="M10 5V3h12v2"/>',
+        "Kitab":'<path d="M6 7h18v21H6z"/><path d="M10 11h10M10 16h10M10 21h7"/><path d="M24 10h3v18h-3"/>',
+        "Literasi & Remaja":'<path d="M5 8h22v17H5z"/><path d="M9 13h14M9 18h10"/><path d="m20 4 2 2 4-4"/>',
+        "Literasi Umum":'<path d="M5 7c4-2 8-1 11 2v17c-3-3-7-4-11-2z"/><path d="M27 7c-4-2-8-1-11 2v17c3-3 7-4 11-2z"/><path d="M10 13h3M19 13h3"/>'
       };
-      return `<button type="button" class="class-folder" data-category-id="${Number(c.id)}"><span class="folder-icon"><img class="folder-illustration" src="${categoryArt[c.name]||'katalog-bacaan-umum.webp'}" alt="" loading="lazy"><span class="folder-sparkle">✦</span></span><strong>${esc(c.name)}</strong><small>${count} buku</small></button>`;
+      const categoryIcon=name=>`<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">${categorySymbols[name]||categorySymbols["Bacaan Umum"]}</svg>`;
+      return `<button type="button" class="class-folder" data-category-id="${Number(c.id)}"><span class="folder-icon">${categoryIcon(c.name)}</span><strong>${esc(c.name)}</strong><small>${count} buku</small></button>`;
     }).join('');
     folders.querySelectorAll('[data-category-id]').forEach(btn=>{
       btn.addEventListener('click',()=>{
